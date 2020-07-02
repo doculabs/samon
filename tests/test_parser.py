@@ -38,3 +38,20 @@ class ParserTest(TestCase):
         self.assertEqual(len(root.children[0].children), 1)
         self.assertEqual(len(root.children[1].children), 2)
         # template.show_element_tree()
+
+    def test_parse_attributes(self):
+        tmpl = b"""
+        <root xmlns:c="http://example.org">
+            <child attr1="val1" c:attr2="val2" />
+            <child2></child2>
+        </root>
+        """
+        parser = Parser(environment=Environment(loader=None))
+        template = parser.parse(BytesIO(tmpl))
+
+        child1 = template.root_element.children[0]
+        self.assertSequenceEqual(list(child1.xml_attrs.keys()), ['attr1', '{http://example.org}attr2'])
+        self.assertSequenceEqual(list(child1.xml_attrs.values()), ['val1', 'val2'])
+
+        child2 = template.root_element.children[1]
+        self.assertEqual(child2.xml_attrs, {})
