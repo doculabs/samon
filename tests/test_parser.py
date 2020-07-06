@@ -1,6 +1,7 @@
 from io import BytesIO
 from unittest import TestCase
 
+from doculabs.samon import registry
 from doculabs.samon.elements import BaseElement
 from doculabs.samon.environment import Environment
 from doculabs.samon.parser import Parser
@@ -55,3 +56,20 @@ class ParserTest(TestCase):
 
         child2 = template.root_element.children[1]
         self.assertEqual(child2.xml_attrs, {})
+
+    def test_parse_custom_element(self):
+        tmpl = b"""
+        <root>
+            <example attr1="1" attr2="sdf" />
+        </root>
+        """
+
+        @registry.element('example')
+        class Example(BaseElement):
+            pass
+
+        parser = Parser(environment=Environment(loader=None))
+        template = parser.parse(BytesIO(tmpl))
+
+        self.assertIsInstance(template.root_element, BaseElement)
+        self.assertIsInstance(template.root_element.children[0], Example)
