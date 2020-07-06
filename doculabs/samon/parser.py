@@ -25,7 +25,14 @@ class Parser(sax.ContentHandler):
 
     def startElementNS(self, name, qname, attrs):
         ns, name = name
-        element = BaseElement(tag_name=name, xml_attrs=attrs)
+
+        if ns:
+            fqdn = '{' + ns + '}' + name
+        else:
+            fqdn = name
+
+        klass = self.environment.registry.get_class_by_name(fqdn)
+        element = klass(tag_name=name, xml_attrs=attrs)
         if self.act_parent is None:
             assert self.template.root_element is None
             self.template.root_element = self.act_parent = element
