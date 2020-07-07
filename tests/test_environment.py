@@ -15,6 +15,6 @@ class EnvironmentTest(TestCase):
 
     def test_get_template(self):
         env = get_base_environment()
-        template = env.get_template('template1.html')
+        template = env.get_template('template1.xml')
         self.assertIsInstance(template, Template)
         self.assertEqual(template.root_element.xml_tag, 'root')
