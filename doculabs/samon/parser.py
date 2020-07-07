@@ -1,25 +1,36 @@
+from io import BytesIO
 from xml import sax
 
 from .elements import BaseElement
-from .environment import Environment
 from .template import Template
+
+if False:
+    from .environment import Environment
 
 
 class Parser(sax.ContentHandler):
-    def __init__(self, environment: Environment):
+    def __init__(self, environment: 'Environment'):
         self.environment = environment
-        self.template = Template()
 
+        self.template = None
         self.act_parent = None
 
-    def parse(self, source: bytes):
+    def parse(self, source: bytes, template_name: str):
+        self.template = self.environment.template_class()
+        self.act_parent = None
+
         parser = sax.make_parser()
         #parser.setFeature(sax.handler.feature_external_pes, False)
         #parser.setFeature(sax.handler.feature_external_ges, False)
         parser.setFeature(sax.handler.feature_namespaces, True)
         #parser.setProperty(sax.handler.property_lexical_handler, self)
         parser.setContentHandler(self)
-        parser.parse(source)
+
+        isource = sax.xmlreader.InputSource()
+        isource.setByteStream(BytesIO(source))
+        isource.setSystemId(template_name)
+
+        parser.parse(isource)
 
         return self.template
 
@@ -32,7 +43,7 @@ class Parser(sax.ContentHandler):
             fqdn = name
 
         klass = self.environment.registry.get_class_by_name(fqdn)
-        element = klass(tag_name=name, xml_attrs=attrs)
+        element = klass(xml_tag=name, xml_attrs=attrs)
         if self.act_parent is None:
             assert self.template.root_element is None
             self.template.root_element = self.act_parent = element

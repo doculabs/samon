@@ -11,7 +11,7 @@ from doculabs.samon.template import Template
 class ParserTest(TestCase):
     def test_parse_result(self):
         parser = Parser(environment=Environment(loader=None))
-        template = parser.parse(BytesIO(b'<root></root>'))
+        template = parser.parse(b'<root></root>', template_name='test')
         self.assertIsInstance(template, Template)
         self.assertIsInstance(template.root_element, BaseElement)
 
@@ -28,14 +28,14 @@ class ParserTest(TestCase):
         </root>
         """
         parser = Parser(environment=Environment(loader=None))
-        template = parser.parse(BytesIO(tmpl))
+        template = parser.parse(tmpl, template_name='test')
 
         root = template.root_element
         self.assertIsInstance(root, BaseElement)
         self.assertEqual(root.parent, None)
         self.assertEqual(len(root.children), 2)
-        self.assertEqual(root.children[0].tag_name, 'child1')
-        self.assertEqual(root.children[1].tag_name, 'child2')
+        self.assertEqual(root.children[0].xml_tag, 'child1')
+        self.assertEqual(root.children[1].xml_tag, 'child2')
         self.assertEqual(len(root.children[0].children), 1)
         self.assertEqual(len(root.children[1].children), 2)
         # template.show_element_tree()
@@ -48,7 +48,7 @@ class ParserTest(TestCase):
         </root>
         """
         parser = Parser(environment=Environment(loader=None))
-        template = parser.parse(BytesIO(tmpl))
+        template = parser.parse(tmpl, template_name='test')
 
         child1 = template.root_element.children[0]
         self.assertSequenceEqual(list(child1.xml_attrs.keys()), ['attr1', '{http://example.org}attr2'])
@@ -69,7 +69,7 @@ class ParserTest(TestCase):
             pass
 
         parser = Parser(environment=Environment(loader=None))
-        template = parser.parse(BytesIO(tmpl))
+        template = parser.parse(tmpl, template_name='test')
 
         self.assertIsInstance(template.root_element, BaseElement)
         self.assertIsInstance(template.root_element.children[0], Example)

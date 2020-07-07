@@ -11,7 +11,7 @@ class BaseElementTest(TestCase):
             ('http://example.org', 'attr2'): 'val2'
         }
 
-        element = BaseElement(tag_name='tag', xml_attrs=xml_attrs)
+        element = BaseElement(xml_tag='tag', xml_attrs=xml_attrs)
         self.assertEqual(element.xml_attrs, {'attr1': 'val1', '{http://example.org}attr2': 'val2'})
 
     def test_parse_expressions(self):
@@ -21,7 +21,7 @@ class BaseElementTest(TestCase):
             ('https://doculabs.io/2020/xtmpl#data-binding', 'attr2'): 'val'
         }
 
-        e = BaseElement(tag_name='tag', xml_attrs=xml_attrs)
+        e = BaseElement(xml_tag='tag', xml_attrs=xml_attrs)
         self.assertIsInstance(e.xml_attrs['{https://doculabs.io/2020/xtmpl#control}if'], Condition)
         self.assertIsInstance(e.xml_attrs['{https://doculabs.io/2020/xtmpl#control}for'], ForLoop)
         self.assertIsInstance(e.xml_attrs['{https://doculabs.io/2020/xtmpl#data-binding}attr2'], Bind)

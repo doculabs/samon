@@ -4,8 +4,8 @@ from doculabs.samon.expressions import Bind, Condition, ForLoop
 
 
 class BaseElement:
-    def __init__(self, tag_name: str, xml_attrs: AttributesNSImpl):
-        self.tag_name = tag_name
+    def __init__(self, xml_tag: str, xml_attrs: AttributesNSImpl):
+        self.xml_tag = xml_tag
 
         self.xml_attrs = self._parse_xml_attrs(xml_attrs)
         self.parent = None
