@@ -1,0 +1,5 @@
+<root xmlns:c="https://doculabs.io/2019/xtmpl#control" xmlns:b="https://doculabs.io/2019/xtmpl#data-binding">
+    <child1 c:for="_ in iterable"></child1>
+    <child2 c:if="value == 7"></child2>
+    <child3 c:if="value == 8"></child3>
+</root>

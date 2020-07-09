@@ -27,9 +27,9 @@ class ExpressionTest(TestCase):
         context = {'it': ["a", "b", "c"]}
         iterable = l.eval(context=context)
 
-        self.assertEqual(next(iterable), (0, 'c', "a"))
-        self.assertEqual(next(iterable), (1, 'c', "b"))
-        self.assertEqual(next(iterable), (2, 'c', "c"))
+        self.assertEqual(next(iterable), (1, 'c', "a"))
+        self.assertEqual(next(iterable), (2, 'c', "b"))
+        self.assertEqual(next(iterable), (3, 'c', "c"))
 
     def test_looping_naming_error(self):
         self.assertRaises(SyntaxError, lambda: ForLoop(expr='2 in it'))

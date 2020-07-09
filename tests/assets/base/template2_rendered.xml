@@ -1,0 +1,5 @@
+<root xmlns:c="https://doculabs.io/2019/xtmpl#control" xmlns:b="https://doculabs.io/2019/xtmpl#data-binding">
+    <child1>aaa</child1>
+    <child1>aaa</child1>
+    <child1>aaa</child1>
+</root>

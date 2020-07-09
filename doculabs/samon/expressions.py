@@ -36,7 +36,7 @@ class ForLoop(Expression):
     def eval(self, context):
         try:
             iterable = simple_eval(f'{self.iterable}', names=context)
-            for counter, item in enumerate(iterable):
+            for counter, item in enumerate(iterable, start=1):
                 yield counter, self.loop_variable, item
         except NameNotDefined as e:
             raise ValueError(f'"{self.iterable}" is not defined in context') from e
