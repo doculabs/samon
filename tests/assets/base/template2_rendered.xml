@@ -1,5 +1,14 @@
-<root xmlns:c="https://doculabs.io/2019/xtmpl#control" xmlns:b="https://doculabs.io/2019/xtmpl#data-binding">
-    <child1>aaa</child1>
-    <child1>aaa</child1>
-    <child1>aaa</child1>
+<root>
+    <child1 counter="1">
+        value1
+    </child1>
+    <child1 counter="2">
+        value1
+    </child1>
+    <child1 counter="3">
+        value1
+    </child1>
+    <child3 attr1="8">
+        value3
+    </child3>
 </root>

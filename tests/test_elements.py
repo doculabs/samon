@@ -43,7 +43,7 @@ class BaseElementTest(TestCase):
 
         e = BaseElement(xml_tag='tag', xml_attrs=xml_attrs)
         xml = e.to_string(context={'val': 'example_value'}, indent=0).getvalue()
-        self.assertEqual(xml, '<tag attr2="example_value"></tag>\n')
+        self.assertEqual(xml, '<tag attr2="example_value">\n</tag>\n')
 
     def test_eval_forloop(self):
         xml_attrs = {
@@ -81,4 +81,4 @@ class BaseElementTest(TestCase):
 
     def test_render_anonymuselement(self):
         e = AnonymusElement(text='example')
-        self.assertEqual(e.to_string().getvalue(), 'example\n')
+        self.assertEqual(e.to_string(context={}).getvalue(), 'example\n')

@@ -5,7 +5,7 @@ from doculabs.samon.elements import BaseElement
 
 class Template:
     def __init__(self):
-        self.root_element = None
+        self.root_element = None  # type: BaseElement
 
     def _show_element_subtree(self, element: BaseElement, stdout, indent: int=1):
         spaces = ' ' * (indent - 1) * 4
@@ -15,3 +15,7 @@ class Template:
 
     def show_element_tree(self, stdout=sys.stdout):
         return self._show_element_subtree(element=self.root_element, stdout=stdout)
+
+    def render_to_string(self, context: dict):
+        out = self.root_element.to_string(context=context)
+        return out.getvalue()

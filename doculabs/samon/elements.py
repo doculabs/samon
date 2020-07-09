@@ -61,12 +61,13 @@ class BaseElement:
         return retval
 
     @contextmanager
-    def frame(self, io, context):
-        io.write(f'<{self.xml_tag}{self.format_xml_attrs(context)}>')
+    def frame(self, io, context, indent):
+        indent = constants.INDENT * indent
+        io.write(f'{indent}<{self.xml_tag}{self.format_xml_attrs(context)}>\n')
         yield
-        io.write(f'</{self.xml_tag}>\n')
+        io.write(f'{indent}</{self.xml_tag}>\n')
 
-    def to_string(self, context, io=None, indent=1):
+    def to_string(self, context, io=None, indent=0):
         io = io or StringIO()
 
         if for_loop_def := self.xml_attrs.get(f'{{{constants.XML_NAMESPACE_FLOW_CONTROL}}}for', None):  # type: ForLoop
@@ -76,13 +77,13 @@ class BaseElement:
 
                 if_def = self.xml_attrs.get(f'{{{constants.XML_NAMESPACE_FLOW_CONTROL}}}if', None)
                 if if_def is None or if_def.eval(context):
-                    with self.frame(io, context):
+                    with self.frame(io, context, indent):
                         for child in self.children:
                             child.to_string(context, io, indent=indent + 1)
         else:
             if_def = self.xml_attrs.get(f'{{{constants.XML_NAMESPACE_FLOW_CONTROL}}}if', None)
             if if_def is None or if_def.eval(context):
-                with self.frame(io, context):
+                with self.frame(io, context, indent):
                     for child in self.children:
                         child.to_string(context, io, indent=indent+1)
 
@@ -93,7 +94,9 @@ class AnonymusElement:
     def __init__(self, text):
         self.text = text
 
-    def to_string(self, *args, io=None, indent=1):
+    def to_string(self, context, io=None, indent=0):
         io = io or StringIO()
-        io.write(f'{self.text}\n')
+
+        indent = constants.INDENT * indent
+        io.write(f'{indent}{self.text}\n')
         return io
