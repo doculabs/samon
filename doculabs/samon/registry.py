@@ -1,13 +1,14 @@
 # coding: utf-8
 from copy import copy
 
-from .elements import BaseElement
+from .elements import BaseElement, AnonymusElement
 from .exceptions import ElementNameConflict
 
 
 class ElementRegistry:
     def __init__(self):
         self.xml_to_object_mapper = {}
+        self.anonymus_element_klass = AnonymusElement
 
     def element(self, name=None, element_class=None, namespace=None):
         if namespace:

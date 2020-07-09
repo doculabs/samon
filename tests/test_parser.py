@@ -2,7 +2,7 @@ from io import BytesIO
 from unittest import TestCase
 
 from doculabs.samon import registry
-from doculabs.samon.elements import BaseElement
+from doculabs.samon.elements import BaseElement, AnonymusElement
 from doculabs.samon.environment import Environment
 from doculabs.samon.parser import Parser
 from doculabs.samon.template import Template
@@ -73,3 +73,28 @@ class ParserTest(TestCase):
 
         self.assertIsInstance(template.root_element, BaseElement)
         self.assertIsInstance(template.root_element.children[0], Example)
+
+    def test_parse_text(self):
+        tmpl = b"""
+        <root>
+            some 
+            example text
+            <child1>child1</child1>
+            exmaple2
+            <child2>child2</child2>
+        </root>
+        """
+        parser = Parser(environment=Environment(loader=None))
+        template = parser.parse(tmpl, template_name='test')
+
+        root = template.root_element
+        self.assertEqual(len(root.children), 5)
+        self.assertIsInstance(root.children[0], AnonymusElement)
+        self.assertEqual(root.children[0].text, 'some')
+        self.assertIsInstance(root.children[1], AnonymusElement)
+        self.assertEqual(root.children[1].text, 'example text')
+        self.assertIsInstance(root.children[3], AnonymusElement)
+        self.assertEqual(root.children[3].text, 'exmaple2')
+
+        self.assertEqual(root.children[2].children[0].text, 'child1')
+        self.assertEqual(root.children[4].children[0].text, 'child2')

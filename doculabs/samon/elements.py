@@ -78,13 +78,22 @@ class BaseElement:
                 if if_def is None or if_def.eval(context):
                     with self.frame(io, context):
                         for child in self.children:
-                            child.to_string(io, context, indent=indent + 1)
+                            child.to_string(context, io, indent=indent + 1)
         else:
             if_def = self.xml_attrs.get(f'{{{constants.XML_NAMESPACE_FLOW_CONTROL}}}if', None)
             if if_def is None or if_def.eval(context):
                 with self.frame(io, context):
                     for child in self.children:
-                        child.to_string(io, context, indent=indent+1)
+                        child.to_string(context, io, indent=indent+1)
 
-        io.seek(0)
-        return io.read()
+        return io
+
+
+class AnonymusElement:
+    def __init__(self, text):
+        self.text = text
+
+    def to_string(self, *args, io=None, indent=1):
+        io = io or StringIO()
+        io.write(f'{self.text}\n')
+        return io

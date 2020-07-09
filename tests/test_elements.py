@@ -3,7 +3,7 @@ from pathlib import Path
 from unittest import TestCase
 
 from doculabs.samon import constants
-from doculabs.samon.elements import BaseElement
+from doculabs.samon.elements import BaseElement, AnonymusElement
 from doculabs.samon.expressions import Condition, ForLoop, Bind
 
 
@@ -42,7 +42,7 @@ class BaseElementTest(TestCase):
         }
 
         e = BaseElement(xml_tag='tag', xml_attrs=xml_attrs)
-        xml = e.to_string(context={'val': 'example_value'}, indent=0)
+        xml = e.to_string(context={'val': 'example_value'}, indent=0).getvalue()
         self.assertEqual(xml, '<tag attr2="example_value"></tag>\n')
 
     def test_eval_forloop(self):
@@ -52,7 +52,7 @@ class BaseElementTest(TestCase):
         }
 
         e = BaseElement(xml_tag='tag', xml_attrs=xml_attrs)
-        xml = e.to_string(context={'val': [1, 2, 3]}, indent=0)
+        xml = e.to_string(context={'val': [1, 2, 3]}, indent=0).getvalue()
         self.assertXmlEqual(xml, 'assets/elements/forloop.xml')
 
     def test_eval_if(self):
@@ -62,10 +62,10 @@ class BaseElementTest(TestCase):
         }
 
         e = BaseElement(xml_tag='tag', xml_attrs=xml_attrs)
-        xml = e.to_string(context={'val': 8}, indent=0)
+        xml = e.to_string(context={'val': 8}, indent=0).getvalue()
         self.assertEqual(xml, '')
 
-        xml = e.to_string(context={'val': 7}, indent=0)
+        xml = e.to_string(context={'val': 7}, indent=0).getvalue()
         self.assertXmlEqual(xml, 'assets/elements/ifcond.xml')
 
     def test_if_and_for_precedence(self):
@@ -76,5 +76,9 @@ class BaseElementTest(TestCase):
         }
 
         e = BaseElement(xml_tag='tag', xml_attrs=xml_attrs)
-        xml = e.to_string(context={'val2': [7, 8, 9], 'val': 7}, indent=0)
+        xml = e.to_string(context={'val2': [7, 8, 9], 'val': 7}, indent=0).getvalue()
         self.assertXmlEqual(xml, 'assets/elements/if_and_for.xml')
+
+    def test_render_anonymuselement(self):
+        e = AnonymusElement(text='example')
+        self.assertEqual(e.to_string().getvalue(), 'example\n')

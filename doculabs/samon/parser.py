@@ -1,10 +1,8 @@
 from io import BytesIO
+from typing import TYPE_CHECKING
 from xml import sax
 
-from .elements import BaseElement
-from .template import Template
-
-if False:
+if TYPE_CHECKING:
     from .environment import Environment
 
 
@@ -53,3 +51,11 @@ class Parser(sax.ContentHandler):
 
     def endElementNS(self, *args, **kwargs):
         self.act_parent = self.act_parent.parent
+
+    def characters(self, content):
+        if len(content.strip()) == 0:
+            return
+
+        content = sax.saxutils.escape(content).strip()
+        element = self.environment.registry.anonymus_element_klass(text=content)
+        self.act_parent.add_child(element)
