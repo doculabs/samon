@@ -69,18 +69,18 @@ class BaseElement:
     def to_string(self, context, io=None, indent=1):
         io = io or StringIO()
 
-        if for_loop_def := self.xml_attrs.get('{https://doculabs.io/2020/xtmpl#control}for', None):  # type: ForLoop
+        if for_loop_def := self.xml_attrs.get(f'{{{constants.XML_NAMESPACE_FLOW_CONTROL}}}for', None):  # type: ForLoop
             for counter, loop_var_name, loop_var_val in for_loop_def.eval(context):
                 context['loop'] = {'index': counter, 'index0': counter - 1, 'odd': bool(counter % 2 == 1)}
                 context[loop_var_name] = loop_var_val
 
-                if_def = self.xml_attrs.get('{https://doculabs.io/2020/xtmpl#control}if', None)
+                if_def = self.xml_attrs.get(f'{{{constants.XML_NAMESPACE_FLOW_CONTROL}}}if', None)
                 if if_def is None or if_def.eval(context):
                     with self.frame(io, context):
                         for child in self.children:
                             child.to_string(io, context, indent=indent + 1)
         else:
-            if_def = self.xml_attrs.get('{https://doculabs.io/2020/xtmpl#control}if', None)
+            if_def = self.xml_attrs.get(f'{{{constants.XML_NAMESPACE_FLOW_CONTROL}}}if', None)
             if if_def is None or if_def.eval(context):
                 with self.frame(io, context):
                     for child in self.children:
