@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 from io import StringIO
+from typing import List
 from xml.sax.xmlreader import AttributesNSImpl
 
 from doculabs.samon import constants
