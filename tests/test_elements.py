@@ -45,6 +45,15 @@ class BaseElementTest(TestCase):
         xml = e.to_string(context={'val': 'example_value'}, indent=0).getvalue()
         self.assertEqual(xml, '<tag attr2="example_value">\n</tag>\n')
 
+    def test_text_binding(self):
+        xml_attrs = {
+            (constants.XML_NAMESPACE_DATA_BINDING, 'text'): 'val'
+        }
+
+        e = BaseElement(xml_tag='tag', xml_attrs=xml_attrs)
+        xml = e.to_string(context={'val': 'example_value'}, indent=0).getvalue()
+        self.assertEqual(xml, '<tag>\nexample_value\n</tag>\n')
+
     def test_eval_forloop(self):
         xml_attrs = {
             (constants.XML_NAMESPACE_FLOW_CONTROL, 'for'): 'a in val',
