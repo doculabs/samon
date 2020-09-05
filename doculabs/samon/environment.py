@@ -16,5 +16,8 @@ class Environment:
         self.parser = Parser(environment=self)
 
     def get_template(self, template_name):
-        src = self.loader.get_source(template_name)
-        return self.parser.parse(src, template_name=template_name)
+        src, source_path = self.loader.get_source(template_name)
+        template = self.parser.parse(src, template_name=template_name)
+        template.source_path = source_path
+
+        return template

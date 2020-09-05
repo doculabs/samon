@@ -6,6 +6,7 @@ from doculabs.samon.elements import BaseElement
 class Template:
     def __init__(self):
         self.root_element = None  # type: BaseElement
+        self.source_path = None  # type: Path
 
     def _show_element_subtree(self, element: BaseElement, stdout, indent: int=1):
         spaces = ' ' * (indent - 1) * 4

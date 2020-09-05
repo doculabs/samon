@@ -55,9 +55,6 @@ class BaseElement:
             elif k.startswith(f'{{{constants.XML_NAMESPACE_DATA_BINDING}}}'):
                 k = k.replace(f'{{{constants.XML_NAMESPACE_DATA_BINDING}}}', '')
 
-                if k == 'text':
-                    continue
-
                 retval += f' {k}="{v.eval(context)}"'
             else:
                 retval += f' {k}="{v}"'
@@ -68,10 +65,6 @@ class BaseElement:
     def frame(self, io, context, indent):
         indent = constants.INDENT * indent
         io.write(f'{indent}<{self.xml_tag}{self.format_xml_attrs(context)}>\n')
-        if text := self.xml_attrs.get(constants.XML_TEXT_BINDING_TAG, None):
-            text = text.eval(context)
-            if len(text):
-                io.write(f'{text}\n')
         yield
         io.write(f'{indent}</{self.xml_tag}>\n')
 

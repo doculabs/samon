@@ -24,7 +24,8 @@ class FileSystemLoaderTest(TestCase):
                 f.write('<example></example>')
 
             loader = FileSystemLoader(search_path=p)
-            source = loader.get_source('template.xml')
+            source, source_path = loader.get_source('template.xml')
             self.assertEqual(source, b'<example></example>')
+            self.assertEqual(source_path, p / 'template.xml')
 
             self.assertRaises(TemplateNotFound, lambda: loader.get_source('example2.xml'))
