@@ -4,7 +4,7 @@ from unittest import TestCase
 from doculabs.samon import registry
 from doculabs.samon.elements import BaseElement, AnonymusElement
 from doculabs.samon.environment import Environment
-from doculabs.samon.parser import Parser
+from doculabs.samon.parser import DefaultParser as Parser
 from doculabs.samon.template import Template
 
 

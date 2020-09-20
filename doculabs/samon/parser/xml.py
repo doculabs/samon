@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING
 from xml import sax
 
 if TYPE_CHECKING:
-    from .environment import Environment
+    from ..environment import Environment
 
 
-class Parser(sax.ContentHandler):
+class XmlParser(sax.ContentHandler):
     def __init__(self, environment: 'Environment'):
         self.environment = environment
 

@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name='samon',
-    version='0.3',
+    version='0.4',
     description='Samon (salmon) XML based templating engine',
     license='BSD',
     author='Bence Lovas',

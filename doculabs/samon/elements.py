@@ -47,7 +47,7 @@ class BaseElement:
         for child in self.children:
             child.build_rendering_tree(indent=indent + 1)
 
-    def format_xml_attrs(self, context) -> str:
+    def eval_xml_attrs(self, context) -> str:
         retval = ''
         for k, v in self.xml_attrs.items():
             if k.startswith(f'{{{constants.XML_NAMESPACE_FLOW_CONTROL}}}'):
@@ -61,10 +61,18 @@ class BaseElement:
 
         return retval
 
+    @property
+    def attrs_as_xml(self) -> str:
+        retval = ''
+        for k, v in self.xml_attrs.items():
+            retval += f' {k}="{v}"'
+
+        return retval
+
     @contextmanager
     def frame(self, io, context, indent):
         indent = constants.INDENT * indent
-        io.write(f'{indent}<{self.xml_tag}{self.format_xml_attrs(context)}>\n')
+        io.write(f'{indent}<{self.xml_tag}{self.eval_xml_attrs(context)}>\n')
         yield
         io.write(f'{indent}</{self.xml_tag}>\n')
 
@@ -94,6 +102,8 @@ class BaseElement:
 class AnonymusElement:
     def __init__(self, text):
         self.text = text
+        self.xml_tag = None
+        self.children = []
 
     def to_string(self, context, io=None, indent=0):
         io = io or StringIO()
